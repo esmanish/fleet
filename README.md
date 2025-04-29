@@ -31,7 +31,7 @@ The system consists of two main components:
 1. **Clone the repository**
 
 ```bash
-git clone [repository-url]
+git clone https://github.com/esmanish/fleet.git
 cd ais-vessel-tracker
 ```
 

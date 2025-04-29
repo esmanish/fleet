@@ -35,37 +35,10 @@ git clone https://github.com/esmanish/fleet.git
 cd fleet
 ```
 
-2. **Create a virtual environment (recommended)**
-
-```bash
-python -m venv venv
-```
-
-3. **Activate the virtual environment**
-
-- On Windows:
-```bash
-venv\Scripts\activate
-```
-
-- On macOS/Linux:
-```bash
-source venv/bin/activate
-```
-
-4. **Install dependencies**
+2. **Install dependencies**
 
 ```bash
 pip install -r requirements.txt
-```
-
-5. **Configure the AIS data collector**
-
-Edit the `collect_data` function in the AIS decoder script to use the correct serial port:
-
-```python
-# Change COM3 to your AIS receiver's port
-ser = serial.Serial(port='COM3', baudrate=38400, timeout=1)
 ```
 
 ## Running the Application
@@ -73,7 +46,7 @@ ser = serial.Serial(port='COM3', baudrate=38400, timeout=1)
 ### 1. Start the AIS data collector
 
 ```bash
-python ais_decoder.py
+python data_collector.py
 ```
 
 This will start collecting AIS data and save it to `ais_data.json`.

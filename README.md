@@ -32,7 +32,7 @@ The system consists of two main components:
 
 ```bash
 git clone https://github.com/esmanish/fleet.git
-cd ais-vessel-tracker
+cd fleet
 ```
 
 2. **Create a virtual environment (recommended)**

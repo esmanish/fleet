@@ -1,0 +1,111 @@
+/* AIS Dashboard styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #0057b8;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    margin-top: 0;
+}
+
+.dashboard-panel {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+#map {
+    height: 500px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.stat-box {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    flex: 1;
+    margin: 0 5px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0057b8;
+}
+
+#position_chart {
+    height: 300px;
+    width: 100%;
+}
+
+.vessel-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.vessel-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.vessel-item:hover {
+    background-color: #f0f0f0;
+}
+
+.vessel-popup h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.update-time {
+    text-align: right;
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stats {
+        flex-direction: column;
+    }
+    
+    .stat-box {
+        margin: 5px 0;
+    }
+    
+    #map {
+        height: 400px;
+    }
+    
+    #position_chart {
+        height: 250px;
+    }
+}

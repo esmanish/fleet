@@ -1,0 +1,4 @@
+flask
+plotly
+pandas
+folium

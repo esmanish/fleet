@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIS Vessel Tracker</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.10.0/plotly.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #0057b8;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin: 0;
+        }
+        .dashboard-panel {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .stat-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            flex: 1;
+            margin: 0 5px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0057b8;
+        }
+        #position_chart {
+            height: 300px;
+            width: 100%;
+        }
+        .vessel-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .vessel-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .vessel-item:hover {
+            background-color: #f0f0f0;
+        }
+        .update-time {
+            text-align: right;
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AIS Vessel Tracker</h1>
+    </header>
+    
+    <div class="container">
+        <div class="stats">
+            <div class="stat-box">
+                <div>Active Vessels</div>
+                <div id="vessel-count" class="stat-value">0</div>
+            </div>
+            <div class="stat-box">
+                <div>Last Update</div>
+                <div id="last-update" class="stat-value">--:--</div>
+            </div>
+            <div class="stat-box">
+                <div>Avg. Speed</div>
+                <div id="avg-speed" class="stat-value">0 kts</div>
+            </div>
+        </div>
+        
+        <div class="dashboard-panel">
+            <h2>Live Vessel Map</h2>
+            <div id="map"></div>
+            <div class="update-time">Updates automatically every 5 seconds</div>
+        </div>
+        
+        <div class="dashboard-panel">
+            <h2>Vessel Position History</h2>
+            <div id="position_chart"></div>
+        </div>
+
+        <div class="dashboard-panel">
+            <h2>Vessel List</h2>
+            <div id="vessel-list" class="vessel-list">
+                <!-- Vessel items will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vessel markers and data storage
+        let vessels = {};
+        let map;
+        let markers = {};
+        
+        // Initialize map
+        $(document).ready(function() {
+            // Set up the map
+            map = L.map('map').setView([0, 0], 2);
+            
+            // Add marine-style tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            // Start data fetch loop
+            fetchData();
+            setInterval(fetchData, 5000); // Update every 5 seconds
+        });
+        
+        // Fetch AIS data from server
+        function fetchData() {
+            $.ajax({
+                url: '/api/data',
+                type: 'GET',
+                success: function(data) {
+                    updateDashboard(data);
+                },
+                error: function(error) {
+                    console.error("Error fetching AIS data:", error);
+                }
+            });
+        }
+        
+        // Update dashboard with new data
+        function updateDashboard(data) {
+            if (!data || data.length === 0) return;
+            
+            // Update stats
+            $('#vessel-count').text(data.length);
+            $('#last-update').text(new Date().toLocaleTimeString());
+            
+            // Calculate average speed if available
+            let speeds = data.filter(v => v.speed).map(v => v.speed);
+            let avgSpeed = speeds.length > 0 ? 
+                Math.round(speeds.reduce((a, b) => a + b, 0) / speeds.length) : 0;
+            $('#avg-speed').text(avgSpeed + ' kts');
+            
+            // Clear vessel list
+            $('#vessel-list').empty();
+            
+            // Process each vessel
+            data.forEach(vessel => {
+                if (vessel.latitude && vessel.longitude && vessel.mmsi) {
+                    const vesselId = vessel.mmsi.toString();
+                    const position = [vessel.latitude, vessel.longitude];
+                    
+                    // Store vessel data
+                    vessels[vesselId] = vessel;
+                    
+                    // Update or create marker
+                    if (markers[vesselId]) {
+                        // Update existing marker position
+                        markers[vesselId].setLatLng(position);
+                    } else {
+                        // Create new marker with popup
+                        const marker = L.marker(position);
+                        marker.bindPopup(createPopupContent(vessel));
+                        marker.addTo(map);
+                        markers[vesselId] = marker;
+                    }
+                    
+                    // Add vessel to list
+                    $('#vessel-list').append(createVesselListItem(vessel));
+                }
+            });
+            
+            // Update position chart (for the first vessel with sufficient data)
+            updatePositionChart(data);
+            
+            // If first load, fit map to show all vessels
+            if (Object.keys(vessels).length > 0 && Object.keys(markers).length <= data.length) {
+                const vesselPositions = data
+                    .filter(v => v.latitude && v.longitude)
+                    .map(v => [v.latitude, v.longitude]);
+                
+                if (vesselPositions.length > 0) {
+                    map.fitBounds(vesselPositions);
+                }
+            }
+        }
+        
+        // Create HTML content for marker popup
+        function createPopupContent(vessel) {
+            return `
+                <div class="vessel-popup">
+                    <h3>MMSI: ${vessel.mmsi}</h3>
+                    <p><strong>Type:</strong> ${vessel.message_description || 'Unknown'}</p>
+                    <p><strong>Latitude:</strong> ${vessel.latitude.toFixed(6)}</p>
+                    <p><strong>Longitude:</strong> ${vessel.longitude.toFixed(6)}</p>
+                    ${vessel.speed ? `<p><strong>Speed:</strong> ${vessel.speed} knots</p>` : ''}
+                    ${vessel.course ? `<p><strong>Course:</strong> ${vessel.course}°</p>` : ''}
+                </div>
+            `;
+        }
+        
+        // Create vessel list item
+        function createVesselListItem(vessel) {
+            return `
+                <div class="vessel-item" data-mmsi="${vessel.mmsi}">
+                    <strong>MMSI: ${vessel.mmsi}</strong>
+                    <div>${vessel.message_description || 'Unknown vessel type'}</div>
+                    <div>Position: ${vessel.latitude.toFixed(4)}, ${vessel.longitude.toFixed(4)}</div>
+                </div>
+            `;
+        }
+        
+        // Update position chart
+        function updatePositionChart(data) {
+            // Filter for vessels with position data
+            const positionData = data.filter(msg => msg.latitude && msg.longitude);
+            
+            if (positionData.length === 0) return;
+            
+            // Group by vessel (MMSI)
+            const vesselGroups = {};
+            positionData.forEach(msg => {
+                if (!vesselGroups[msg.mmsi]) {
+                    vesselGroups[msg.mmsi] = [];
+                }
+                vesselGroups[msg.mmsi].push(msg);
+            });
+            
+            // Create traces for plotting
+            const traces = [];
+            
+            // For each vessel, create a trace for its path
+            Object.keys(vesselGroups).forEach((mmsi, index) => {
+                const vesselData = vesselGroups[mmsi];
+                
+                // Sort by timestamp if available
+                if (vesselData[0].timestamp) {
+                    vesselData.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                }
+                
+                traces.push({
+                    x: vesselData.map(v => v.longitude),
+                    y: vesselData.map(v => v.latitude),
+                    mode: 'lines+markers',
+                    name: `MMSI: ${mmsi}`,
+                    line: {
+                        color: getColorForIndex(index),
+                        width: 2
+                    },
+                    marker: {
+                        size: 6
+                    }
+                });
+            });
+            
+            const layout = {
+                title: 'Vessel Positions',
+                xaxis: {
+                    title: 'Longitude'
+                },
+                yaxis: {
+                    title: 'Latitude'
+                },
+                margin: {
+                    l: 50,
+                    r: 50,
+                    b: 50,
+                    t: 50,
+                    pad: 4
+                }
+            };
+            
+            Plotly.newPlot('position_chart', traces, layout);
+        }
+        
+        // Get color based on index
+        function getColorForIndex(index) {
+            const colors = [
+                '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+                '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'
+            ];
+            return colors[index % colors.length];
+        }
+        
+        // Click event for vessel list items
+        $(document).on('click', '.vessel-item', function() {
+            const mmsi = $(this).data('mmsi');
+            if (markers[mmsi]) {
+                // Center map on vessel and open popup
+                map.setView(markers[mmsi].getLatLng(), 10);
+                markers[mmsi].openPopup();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+[
+  {
+    "message_type": 3,
+    "message_description": "Position Report Class A (Response to interrogation)",
+    "timestamp": "2025-04-28 22:20:47",
+    "mmsi": 233183272,
+    "position_accuracy": "High",
+    "longitude": 72.89489333333333,
+    "latitude": 12.726286666666667,
+    "speed": 0.1,
+    "course": 32.2
+  },
+  {
+    "message_type": 3,
+    "message_description": "Position Report Class A (Response to interrogation)",
+    "timestamp": "2025-04-28 22:23:47",
+    "mmsi": 233183272,
+    "position_accuracy": "High",
+    "longitude": 72.89488,
+    "latitude": 12.726266666666668,
+    "speed": 0.0,
+    "course": 256.3
+  },
+  {
+    "message_type": 3,
+    "message_description": "Position Report Class A (Response to interrogation)",
+    "timestamp": "2025-04-28 22:29:47",
+    "mmsi": 233183272,
+    "position_accuracy": "High",
+    "longitude": 72.89493666666667,
+    "latitude": 12.726291666666667,
+    "speed": 0.0,
+    "course": 125.0
+  },
+  {
+    "message_type": 3,
+    "message_description": "Position Report Class A (Response to interrogation)",
+    "timestamp": "2025-04-28 23:32:47",
+    "mmsi": 233183272,
+    "position_accuracy": "High",
+    "longitude": 72.89452666666666,
+    "latitude": 12.725791666666666,
+    "speed": 0.0,
+    "course": 208.7
+  },
+  {
+    "message_type": 1,
+    "message_description": "Position Report Class A",
+    "timestamp": "2025-04-29 01:56:37",
+    "mmsi": 556976392,
+    "position_accuracy": "Low",
+    "longitude": 73.01846666666667,
+    "latitude": 12.701813333333334,
+    "speed": 5.2,
+    "course": 82.4
+  },
+  {
+    "message_type": 3,
+    "message_description": "Position Report Class A (Response to interrogation)",
+    "timestamp": "2025-04-29 01:56:47",
+    "mmsi": 233183272,
+    "position_accuracy": "High",
+    "longitude": 72.89429166666666,
+    "latitude": 12.725876666666666,
+    "speed": 0.0,
+    "course": 230.0
+  },
+  {
+    "message_type": 1,
+    "message_description": "Position Report Class A",
+    "timestamp": "2025-04-29 01:56:56",
+    "mmsi": 556976392,
+    "position_accuracy": "Low",
+    "longitude": 73.01851333333333,
+    "latitude": 12.701878333333333,
+    "speed": 5.2,
+    "course": 81.1
+  },
+  {
+    "message_type": 1,
+    "message_description": "Position Report Class A",
+    "timestamp": "2025-04-29 01:57:18",
+    "mmsi": 556976392,
+    "position_accuracy": "Low",
+    "longitude": 73.01908,
+    "latitude": 12.701971666666667,
+    "speed": 5.3,
+    "course": 78.4
+  },
+  {
+    "message_type": 1,
+    "message_description": "Position Report Class A",
+    "timestamp": "2025-04-29 01:57:37",
+    "mmsi": 556976392,
+    "position_accuracy": "Low",
+    "longitude": 73.0195,
+    "latitude": 12.702026666666667,
+    "speed": 5.3,
+    "course": 280.1
+  },
+  {
+    "message_type": 1,
+    "message_description": "Position Report Class A",
+    "timestamp": "2025-04-29 01:58:56",
+    "mmsi": 556976392,
+    "position_accuracy": "Low",
+    "longitude": 73.02193333333334,
+    "latitude": 12.702498333333333,
+    "speed": 5.5,
+    "course": 74.4
+  },
+  {
+    "message_type": 1,
+    "message_description": "Position Report Class A",
+    "timestamp": "2025-04-29 01:59:08",
+    "mmsi": 556976392,
+    "position_accuracy": "Low",
+    "longitude": 73.02220666666666,
+    "latitude": 12.702625,
+    "speed": 5.5,
+    "course": 74.8
+  },
+  {
+    "message_type": 3,
+    "message_description": "Position Report Class A (Response to interrogation)",
+    "timestamp": "2025-04-29 01:59:47",
+    "mmsi": 233183272,
+    "position_accuracy": "High",
+    "longitude": 72.89419833333334,
+    "latitude": 12.725836666666666,
+    "speed": 0.1,
+    "course": 223.2
+  },
+  {
+    "message_type": 3,
+    "message_description": "Position Report Class A (Response to interrogation)",
+    "timestamp": "2025-04-29 02:02:47",
+    "mmsi": 233183272,
+    "position_accuracy": "High",
+    "longitude": 72.89408,
+    "latitude": 12.725753333333333,
+    "speed": 51.2,
+    "course": 211.8
+  },
+  {
+    "message_type": 3,
+    "message_description": "Position Report Class A (Response to interrogation)",
+    "timestamp": "2025-04-29 02:08:47",
+    "mmsi": 233183272,
+    "position_accuracy": "High",
+    "longitude": 72.89387666666667,
+    "latitude": 12.725438333333333,
+    "speed": 51.2,
+    "course": 209.4
+  }
+]

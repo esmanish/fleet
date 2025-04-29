@@ -7,7 +7,7 @@ from datetime import datetime
 ais_data = []
 
 # MQTT Configuration
-MQTT_BROKER = "localhost"
+MQTT_BROKER = "192.168.31.192"
 MQTT_PORT = 1883
 MQTT_TOPIC = "vessel/ais"
 
